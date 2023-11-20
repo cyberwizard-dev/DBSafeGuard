@@ -15,7 +15,7 @@ composer require cyber/dbsafeguard
 To manually backup your database, run the following command:
 
 ```bash
-php artisan backup:database
+php artisan backup:db
 ```
 
 The backup file will be stored in the `storage/app/backups` directory with a timestamped filename.
@@ -25,14 +25,14 @@ The backup file will be stored in the `storage/app/backups` directory with a tim
 You can schedule automatic backups by adding the following entry to your Laravel task scheduler (usually defined in the `App\Console\Kernel` class):
 
 ```php
-$schedule->command('backup:database')->daily();
+$schedule->command('backup:db')->daily();
 ```
 
 This will run the database backup command daily. Adjust the schedule as needed. Here are some examples:
 
-- `$schedule->command('backup:database')->daily();` - Run daily at midnight.
-- `$schedule->command('backup:database')->dailyAt('3:00');` - Run daily at 3:00 AM.
-- `$schedule->command('backup:database')->twiceDaily(1, 13);` - Run twice a day at 1:00 AM and 1:00 PM.
+- `$schedule->command('backup:db')->daily();` - Run daily at midnight.
+- `$schedule->command('backup:db')->dailyAt('3:00');` - Run daily at 3:00 AM.
+- `$schedule->command('backup:db')->twiceDaily(1, 13);` - Run twice a day at 1:00 AM and 1:00 PM.
 <!-- Add more examples as needed -->
 
 ## Configuration

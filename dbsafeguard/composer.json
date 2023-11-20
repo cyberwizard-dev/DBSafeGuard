@@ -9,7 +9,7 @@
             "email": "eminibest@gmail.com"
         }
     ],
-   
+
     "autoload": {
         "psr-4": {
             "Dbsafeguard\\": "src/"

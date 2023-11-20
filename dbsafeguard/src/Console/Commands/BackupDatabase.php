@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\File;
 class BackupDatabase extends Command
 {
 
-    protected $signature = 'backup:database';
+    protected $signature = 'backup:db';
     protected $description = 'Backup the database';
 
     public function handle(): void
