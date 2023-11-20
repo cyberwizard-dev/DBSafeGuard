@@ -26,4 +26,6 @@ class BackupDatabase extends Command
         exec($command);
         $this->info('Database backup completed successfully.');
     }
+
+
 }

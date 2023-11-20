@@ -10,8 +10,7 @@
         }
     ],
     "require": {
-        "php": "^7.4",
-        "illuminate/support": "^8.0"
+
     },
     "autoload": {
         "psr-4": {
@@ -22,15 +21,19 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
+        ],
+        "post-install-cmd": [
+            "Dbsafeguard\\Message::postInstall"
         ]
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Dbsafeguard\\BackupServiceProvider"
+                "Dbsafeguard\\Providers\\BackupServiceProvider"
             ]
         }
     },
+    "version": "1.0.0",
     "minimum-stability": "stable",
     "prefer-stable": true
 }

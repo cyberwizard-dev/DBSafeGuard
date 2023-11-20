@@ -1,9 +1,9 @@
 <?php
 
-namespace Dbsafeguard;
+namespace Dbsafeguard\Providers;
 
+use Dbsafeguard\Console\Commands\BackupDatabase;
 use Illuminate\Support\ServiceProvider;
-use packages\dbsafeguard\src\Console\Commands\BackupDatabase;
 
 class BackupServiceProvider extends ServiceProvider
 {
