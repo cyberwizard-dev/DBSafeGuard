@@ -39,6 +39,8 @@ This will run the database backup command daily. Adjust the schedule as needed. 
 
 The package uses environment variables (`DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`) to connect to the database. Ensure these variables are correctly set in your `.env` file.
 
+
+
 ## Author
 Cyberwizard
 
@@ -47,3 +49,39 @@ Contact: [eminibest@gmail.com](mailto:eminibest@gmail.com)
 ## License
 
 This package is open-sourced software licensed under the [MIT license](LICENSE).
+
+## Extra
+
+## Installation
+
+You can install this package directly from the GitHub repository. Follow the steps below:
+
+1. Open your project's `composer.json` file.
+
+2. Add the GitHub repository to the `repositories` key:
+
+    ```json
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/cyberwizard-dev/DBSafeGuard/dbsafeguard"
+        }
+    ],
+    ```
+
+3. In the `require` section, specify the package name and version:
+
+    ```json
+    "require": {
+        "cyberwizard/DBSafeGuard/dbsafeguard": "dev-main"
+    },
+    ```
+
+4. Run the following command to install the package:
+
+    ```bash
+    composer install
+    ```
+
+   This will fetch the package directly from the GitHub repository and install it in your project.
+
