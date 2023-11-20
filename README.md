@@ -7,7 +7,7 @@ DBSafeguard Database Backup is a simple Laravel package that provides a convenie
 1. Install the package via Composer:
 
 ```bash
-composer require cyber/dbsafeguard
+composer require cyberwizard/dbsafeguard
 ```
 
 2. **Usage:**
