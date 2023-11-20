@@ -1,5 +1,5 @@
 {
-    "name": "cyber/dbsafeguard",
+    "name": "cyberwizard/dbsafeguard",
     "description": "A Laravel package for safeguarding your database with easy-to-use backup commands.",
     "type": "library",
     "license": "MIT",
