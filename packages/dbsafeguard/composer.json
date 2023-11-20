@@ -1,0 +1,36 @@
+{
+    "name": "cyber/dbsafeguard",
+    "description": "Database Safeguard Package",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Cyberwizard",
+            "email": "eminibest@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4",
+        "illuminate/support": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dbsafeguard\\": "src/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Dbsafeguard\\BackupServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
