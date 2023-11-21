@@ -28,8 +28,6 @@
       ]
     }
   },
-  "require": {
-    "cyberwizard/dbsafeguard": "^1.0@dev"
-  },
+
   "minimum-stability": "dev"
 }
