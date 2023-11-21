@@ -64,7 +64,7 @@ You can install this package directly from the GitHub repository. Follow the ste
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/cyberwizard-dev/DBSafeGuard/dbsafeguard"
+            "url": "https://github.com/cyberwizard-dev/DBSafeGuard/"
         }
     ],
     ```
@@ -73,7 +73,7 @@ You can install this package directly from the GitHub repository. Follow the ste
 
     ```json
     "require": {
-        "cyberwizard/DBSafeGuard/dbsafeguard": "dev-main"
+        "cyberwizard/DBSafeGuard/": "dev-main"
     },
     ```
 
