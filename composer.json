@@ -1,34 +1,35 @@
 {
-    "name": "cyberwizard/dbsafeguard",
-    "description": "A Laravel package for safeguarding your database with easy-to-use backup commands.",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Cyberwizard",
-            "email": "eminibest@gmail.com"
-        }
-    ],
-
-    "autoload": {
-        "psr-4": {
-            "Dbsafeguard\\": "src/"
-        }
-    },
-    "scripts": {
-        "post-autoload-dump": [
-            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi",
-            "@php artisan dbsafeguard:post-install"
-        ]
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Dbsafeguard\\Providers\\BackupServiceProvider"
-            ]
-        }
-    },
-    "version": "1.0.0",
-    "minimum-stability": "dev"
+  "name": "cyberwizard/dbsafeguard",
+  "description": "A Laravel package for safeguarding your database with easy-to-use backup commands.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Cyberwizard",
+      "email": "eminibest@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Dbsafeguard\\": "src/"
+    }
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+      "@php artisan package:discover --ansi",
+      "@php artisan dbsafeguard:post-install"
+    ]
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Dbsafeguard\\Providers\\BackupServiceProvider"
+      ]
+    }
+  },
+  "require": {
+    "cyberwizard/dbsafeguard": "^1.0@dev"
+  },
+  "minimum-stability": "dev"
 }
