@@ -62,6 +62,14 @@ AWS_DEFAULT_REGION=your_region
 AWS_BUCKET=your_bucket_name
 ```
 
+### Backup Retention
+
+By default, the package will keep the latest **3** backups and automatically delete older ones to save storage space. You can change this limit by setting the `MAX_BACKUPS` environment variable in your `.env` file:
+
+```env
+MAX_BACKUPS=5
+```
+
 ## Usage
 
 ### Local Backup

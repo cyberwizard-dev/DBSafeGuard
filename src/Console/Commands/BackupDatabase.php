@@ -105,12 +105,52 @@ class BackupDatabase extends Command
 
                 File::delete($backupFilePath);
                 $this->info('Database backup uploaded to S3 and local temporary file removed.');
+                
+                $this->cleanupOldBackups('s3');
             } catch (\Exception $e) {
                 $this->error('S3 upload failed: ' . $e->getMessage());
                 return;
             }
         } else {
             $this->info('Database backup completed successfully at: ' . $backupFilePath);
+            
+            $this->cleanupOldBackups('local', $backupPath);
+        }
+    }
+
+    protected function cleanupOldBackups(string $disk, ?string $localPath = null): void
+    {
+        $maxBackups = (int) env('MAX_BACKUPS', 3);
+        if ($maxBackups <= 0) return;
+
+        if ($disk === 's3') {
+            $s3Disk = \Illuminate\Support\Facades\Storage::disk('s3');
+            $files = $s3Disk->files('backups');
+            
+            $files = array_filter($files, fn($f) => str_ends_with($f, '.sql'));
+            sort($files);
+            
+            if (count($files) > $maxBackups) {
+                $filesToDelete = array_slice($files, 0, count($files) - $maxBackups);
+                $s3Disk->delete($filesToDelete);
+                $this->info(count($filesToDelete) . ' old backup(s) removed from S3.');
+            }
+        } else {
+            if (!$localPath) return;
+            $files = File::files($localPath);
+            $files = array_filter($files, fn($f) => str_ends_with($f->getFilename(), '.sql'));
+            
+            usort($files, function ($a, $b) {
+                return strcmp($a->getFilename(), $b->getFilename());
+            });
+            
+            if (count($files) > $maxBackups) {
+                $filesToDelete = array_slice($files, 0, count($files) - $maxBackups);
+                foreach ($filesToDelete as $file) {
+                    File::delete($file->getPathname());
+                }
+                $this->info(count($filesToDelete) . ' old backup(s) removed locally.');
+            }
         }
     }
 }
