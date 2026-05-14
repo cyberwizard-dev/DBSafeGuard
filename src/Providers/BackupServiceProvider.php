@@ -3,6 +3,7 @@
 namespace Dbsafeguard\Providers;
 
 use Dbsafeguard\Console\Commands\BackupDatabase;
+use Dbsafeguard\Message;
 use Illuminate\Support\ServiceProvider;
 
 class BackupServiceProvider extends ServiceProvider
@@ -11,6 +12,7 @@ class BackupServiceProvider extends ServiceProvider
     {
         $this->commands([
             BackupDatabase::class,
+            Message::class,
         ]);
     }
 }

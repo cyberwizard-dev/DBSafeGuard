@@ -1,88 +1,96 @@
-# DBSafeguard Database Backup
+# DBSafeGuard
 
-DBSafeguard Database Backup is a simple Laravel package that provides a convenient command-line interface to backup your database.
+DBSafeGuard is a Laravel package that provides a convenient command-line interface to back up your database. It supports MySQL and PostgreSQL databases, and allows you to save backups locally or upload them directly to AWS S3.
+
+## Requirements
+
+- PHP 8.0 or higher
+- Laravel 9.0, 10.0, 11.0, or 12.0+
+- `mysqldump` or `pg_dump` installed on your server (depending on your database)
 
 ## Installation
 
-1. Install the package via Composer:
+Install the package via Composer:
 
 ```bash
-composer require cyberwizard/dbsafeguard:dev-main
-
+composer require cyberwizard/dbsafeguard
 ```
 
-2. **Usage:**
+If you are installing directly from the GitHub repository, add the following to your `composer.json` first:
 
-To manually backup your database, run the following command:
+```json
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/cyberwizard-dev/DBSafeGuard"
+    }
+]
+```
+Then run `composer require cyberwizard/dbsafeguard:dev-main`.
+
+## Configuration
+
+The package automatically uses your standard Laravel database configuration. Ensure the standard environment variables are set in your `.env` file:
+
+```env
+DB_CONNECTION=mysql # or pgsql
+DB_HOST=127.0.0.1
+DB_PORT=3306 # or 5432
+DB_DATABASE=your_database
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
+
+### S3 Configuration
+
+If you plan to upload your backups to AWS S3, you must configure your S3 credentials in your `.env` file:
+
+```env
+AWS_ACCESS_KEY_ID=your_access_key
+AWS_SECRET_ACCESS_KEY=your_secret_key
+AWS_DEFAULT_REGION=your_region
+AWS_BUCKET=your_bucket_name
+```
+
+## Usage
+
+### Local Backup
+
+To back up your database to the local disk, run:
 
 ```bash
 php artisan backup:db
 ```
 
-The backup file will be stored in the `storage/app/backups` directory with a timestamped filename.
+The command will prompt you for a backup path. If you accept the default, the backup file will be stored in the `storage/app/backups` directory with a timestamped filename.
 
-3. **Schedule Backups:**
+### S3 Backup
 
-You can schedule automatic backups by adding the following entry to your Laravel task scheduler (usually defined in the `App\Console\Kernel` class):
+To back up your database and upload it directly to S3, use the `--disk` option:
 
-```php
-$schedule->command('backup:db')->daily();
+```bash
+php artisan backup:db --disk=s3
 ```
 
-This will run the database backup command daily. Adjust the schedule as needed. Here are some examples:
+This will create a temporary local dump, upload it to the `backups/` directory in your S3 bucket, and then remove the local temporary file.
 
-- `$schedule->command('backup:db')->daily();` - Run daily at midnight.
-- `$schedule->command('backup:db')->dailyAt('3:00');` - Run daily at 3:00 AM.
-- `$schedule->command('backup:db')->twiceDaily(1, 13);` - Run twice a day at 1:00 AM and 1:00 PM.
-<!-- Add more examples as needed -->
+### Scheduled Backups
 
-## Configuration
+You can schedule automatic backups using Laravel's task scheduler. Add the following to your console routes or `App\Console\Kernel` class:
 
-The package uses environment variables (`DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`) to connect to the database. Ensure these variables are correctly set in your `.env` file.
+```php
+// Local backup daily at midnight
+Schedule::command('backup:db')->daily();
 
-
+// S3 backup twice daily
+Schedule::command('backup:db --disk=s3')->twiceDaily(1, 13);
+```
 
 ## Author
-Cyberwizard
 
+Cyberwizard  
 Contact: [eminibest@gmail.com](mailto:eminibest@gmail.com)
 
 ## License
 
 This package is open-sourced software licensed under the [MIT license](LICENSE).
-
-## Extra
-
-## Installation
-
-You can install this package directly from the GitHub repository. Follow the steps below:
-
-1. Open your project's `composer.json` file.
-
-2. Add the GitHub repository to the `repositories` key:
-
-    ```json
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/cyberwizard-dev/DBSafeGuard/"
-        }
-    ],
-    ```
-
-3. In the `require` section, specify the package name and version:
-
-    ```json
-    "require": {
-        "cyberwizard/DBSafeGuard/": "dev-main"
-    },
-    ```
-
-4. Run the following command to install the package:
-
-    ```bash
-    composer install
-    ```
-
-   This will fetch the package directly from the GitHub repository and install it in your project.
-
