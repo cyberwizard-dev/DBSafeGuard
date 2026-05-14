@@ -68,8 +68,11 @@ class BackupDatabase extends Command
         if ($disk === 's3') {
             $this->info("Uploading to S3...");
             try {
-                $fileContent = File::get($backupFilePath);
-                \Illuminate\Support\Facades\Storage::disk('s3')->put('backups/' . $fileName, $fileContent);
+                $stream = fopen($backupFilePath, 'r');
+                \Illuminate\Support\Facades\Storage::disk('s3')->put('backups/' . $fileName, $stream);
+                if (is_resource($stream)) {
+                    fclose($stream);
+                }
                 File::delete($backupFilePath);
                 $this->info('Database backup uploaded to S3 and local temporary file removed.');
             } catch (\Exception $e) {
