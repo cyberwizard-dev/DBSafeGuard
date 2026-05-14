@@ -4,6 +4,7 @@ namespace Dbsafeguard\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\Process\Process;
 
 class BackupDatabase extends Command
 {
@@ -55,24 +56,53 @@ class BackupDatabase extends Command
             $command = "mysqldump -u{$username} -p{$password} {$database} > {$backupFilePath}";
         }
         
-        $result = null;
-        $output = [];
-        exec($command, $output, $result);
+        $process = Process::fromShellCommandline($command);
+        $process->setTimeout(null);
+        
+        $dumpBar = $this->output->createProgressBar();
+        $dumpBar->start();
+        
+        $process->start();
+        while ($process->isRunning()) {
+            $dumpBar->advance();
+            usleep(200000); // 200ms
+        }
+        
+        $dumpBar->finish();
+        $this->line('');
 
-        if ($result !== 0) {
+        if (!$process->isSuccessful()) {
             $tool = $connection === 'pgsql' ? 'pg_dump' : 'mysqldump';
-            $this->error("Database dump failed. Ensure {$tool} is installed and credentials are correct.");
+            $this->error("Database dump failed. Ensure {$tool} is installed and credentials are correct. Error: " . $process->getErrorOutput());
             return;
         }
 
         if ($disk === 's3') {
             $this->info("Uploading to S3...");
             try {
+                $fileSize = filesize($backupFilePath);
+                $uploadBar = $this->output->createProgressBar($fileSize);
+                $uploadBar->setFormat(' %current%/%max% bytes [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s%');
+                $uploadBar->start();
+
+                if (!in_array('upload_progress', stream_get_filters())) {
+                    stream_filter_register('upload_progress', UploadProgressFilter::class);
+                }
+
+                UploadProgressFilter::$progressBar = $uploadBar;
+
                 $stream = fopen($backupFilePath, 'r');
+                stream_filter_append($stream, 'upload_progress');
+
                 \Illuminate\Support\Facades\Storage::disk('s3')->put('backups/' . $fileName, $stream);
+                
                 if (is_resource($stream)) {
                     fclose($stream);
                 }
+                
+                $uploadBar->finish();
+                $this->line('');
+
                 File::delete($backupFilePath);
                 $this->info('Database backup uploaded to S3 and local temporary file removed.');
             } catch (\Exception $e) {
@@ -82,5 +112,22 @@ class BackupDatabase extends Command
         } else {
             $this->info('Database backup completed successfully at: ' . $backupFilePath);
         }
+    }
+}
+
+class UploadProgressFilter extends \php_user_filter
+{
+    public static $progressBar;
+
+    public function filter($in, $out, &$consumed, $closing): int
+    {
+        while ($bucket = stream_bucket_make_writeable($in)) {
+            $consumed += $bucket->datalen;
+            if (self::$progressBar) {
+                self::$progressBar->advance($bucket->datalen);
+            }
+            stream_bucket_append($out, $bucket);
+        }
+        return PSFS_PASS_ON;
     }
 }
