@@ -1,6 +1,6 @@
 {
   "name": "cyberwizard/dbsafeguard",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A Laravel package for safeguarding your database with easy-to-use backup commands.",
   "type": "library",
   "license": "MIT",
