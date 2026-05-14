@@ -2,6 +2,12 @@
 
 DBSafeGuard is a Laravel package that provides a convenient command-line interface to back up your database. It supports MySQL and PostgreSQL databases, and allows you to save backups locally or upload them directly to AWS S3.
 
+## What's New in 1.1.0
+
+- **Laravel 12 Support:** Fully compatible with Laravel 9.0 through 12.0+.
+- **PostgreSQL Support:** Automatically detects your connection and supports `pg_dump`.
+- **S3 Uploads:** Stream backups directly to AWS S3 using the new `--disk=s3` flag.
+
 ## Requirements
 
 - PHP 8.0 or higher
